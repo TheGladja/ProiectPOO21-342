@@ -1,0 +1,184 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Individ
+{
+    int i;
+    int varsta;
+    char tip;
+    double energie;
+    unsigned char viu;
+
+    void hraneste();
+    void inmulteste(Individ& x, Individ& y);
+    void ataca(Individ& x, Individ& y);
+    void imbatraneste();
+    void moare();
+
+public:
+
+    Individ();
+
+    void actualizare(Individ& x, Individ& y);
+    int esteviu();
+    int gettip();
+
+    friend istream& operator >>(istream& in, Individ& I);
+
+};
+
+Individ::Individ()
+{
+    this-> i= i;
+    this-> tip= tip;
+    this-> varsta= 0;
+    this-> energie= 6;
+    this-> viu= '1';
+}
+
+istream& operator >>(istream& in, Individ& I)
+{
+    cout<<"\nPozitia: ";
+    in>> I.i;
+    cout<<"\nTip('+' sau '0'): ";
+    in>> I.tip;
+    return in;
+}
+
+void Individ::hraneste()
+{
+    this-> energie += rand()%10+1;
+}
+
+void Individ::inmulteste(Individ& x, Individ& y)
+{
+    if(x.viu=='0')
+    {
+        x.viu = '1';
+        x.tip = this-> tip;
+        x.energie = this-> energie * 2;
+        x.varsta = 0;
+    }
+    if(y.viu=='0')
+    {
+        y.viu = '1';
+        y.tip = this-> tip;
+        y.energie = this-> energie * 2;
+        y.varsta = 0;
+    }
+}
+
+void Individ::ataca(Individ& x, Individ& y)
+{
+    if(x.tip != this-> tip && this-> energie > x.energie)
+    {
+        this-> energie -= x.energie;
+        x.moare();
+    }
+    if(y.tip != this-> tip && this-> energie > y.energie)
+    {
+        this-> energie -= y.energie;
+        y.moare();
+    }
+}
+
+void Individ::imbatraneste()
+{
+    if(this->viu=='1')
+    {
+        const int valoare=4;
+        cout<<"\nVarsta va creste cu valoarea 1";
+        this->varsta++;
+        cout<<"\nEnergia va scadea cu valoarea 4";
+        this->energie -= valoare;
+        if(this->varsta>50 || this->energie<=0)
+            moare();
+    }
+    else
+        cout<<"\nIndividul era mort deja :(";
+}
+
+void Individ::moare()
+{
+    this-> viu= '0';
+    cout<<"\nIndividul de pe pozitia "<< this-> i <<" a murit de boala grea :(";
+}
+
+void Individ::actualizare(Individ& x, Individ& y)
+{
+    hraneste();
+    inmulteste(x,y);
+    ataca(x,y);
+    imbatraneste();
+}
+
+int Individ::esteviu()
+{
+    if(this-> viu == '1')
+        return 1;
+    return 0;
+}
+
+int Individ::gettip()
+{
+    return tip;
+}
+
+void CitireIndivizi(int& n, Individ a[])
+{
+    int i;
+    cout<<"Numarul de indivizi ales: ";
+    cin>>n;
+    for(i=0;i<n;i++)
+        cin>>a[i];
+}
+
+int main()
+{
+    Individ a[30];
+
+    int n, i, task;
+
+    CitireIndivizi(n,a);
+
+    for(i=0;i<n;i++)
+    {
+        cout<<"\n\nCe vrei sa faci cu individul numarul "<<i+1<<"?";
+        if(i>0 && i<n-1)
+        {
+            cout<<"\nPress 1 for update ";
+            cout<<"\nPress 2 for status ";
+            cout<<"\nPress 3 for type ";
+            cin>>task;
+            if(task==1)
+                a[i].actualizare(a[i-1],a[i+1]);
+            else if(task==2)
+                {
+                    if(a[i].esteviu()==1)
+                        cout<<"\nIndividul urmator este viu.";
+                    else if(a[i].esteviu()==0)
+                        cout<<"\nAcest individ nu este viu.";
+                }
+            else if(task==3)
+                cout<<"\nTipul individului este "<<(char)a[i].gettip();
+        }
+        else
+        {
+            cout<<"\nPress 2 for status ";
+            cout<<"\nPress 3 for type ";
+            cin>>task;
+            if(task==2)
+                {
+                    if(a[i].esteviu()==1)
+                        cout<<"\nIndividul urmator este viu.";
+                    else if(a[i].esteviu()==0)
+                        cout<<"\nAcest individ nu este viu.";
+                }
+            else if(task==3)
+                cout<<"\nTipul individului este "<<(char)a[i].gettip();
+        }
+    }
+
+    return 0;
+}

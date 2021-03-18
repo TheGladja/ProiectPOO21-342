@@ -171,7 +171,7 @@ int main()
             if(task==2)
                 {
                     if(a[i].esteviu()==1)
-                        cout<<"\nIndividul urmator este viu.";
+                        cout<<"\nAcest individ este viu.";
                     else if(a[i].esteviu()==0)
                         cout<<"\nAcest individ nu este viu.";
                 }

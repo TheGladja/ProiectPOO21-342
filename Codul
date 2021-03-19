@@ -18,20 +18,21 @@ class Individ
 
 public:
 
-    Individ();
+    Individ(int i = 0, char tip = 0);
 
     void actualizare(Individ& x, Individ& y);
     int esteviu();
     int gettip();
 
     friend istream& operator >>(istream& in, Individ& I);
+    friend ostream& operator <<(ostream& out, const Individ& I);
 
 };
 
-Individ::Individ()
+Individ::Individ(int i, char tip)
 {
-    this-> i= i;
-    this-> tip= tip;
+    this-> i = i;
+    this-> tip = tip;
     this-> varsta= 0;
     this-> energie= 6;
     this-> viu= '1';
